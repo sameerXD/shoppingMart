@@ -15,7 +15,7 @@ exports.register = async (req, res, next)=>{
             email = email.toLowerCase();
         }
         const getShopkeeper = await shopkeeperService.findByEmail(email);
-        if(!getShopkeeper)return sendResponse(req, res, {}, false, 401, "wrong email", "email not found");
+        if(getShopkeeper)return sendResponse(req, res, {}, false, 401, "email already exist", "email already exists");
 
 
         const hash = bcrypt.hashSync(password, util.security.saltRounds);

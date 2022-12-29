@@ -87,7 +87,7 @@ exports.addToCart = async (req, res, next)=>{
         const {product} = req.body;
         const getProduct = await productService.findById(product);
         if(!getProduct) return sendResponse(req,res, {}, false, 404, "product not found", "product not found");
-        
+
         const getUser = await userService.findByEmail(req.user.email);
         getUser.cart.push({product:product});
         const putUser = await userService.updateById(getUser);
@@ -117,7 +117,7 @@ exports.removeFromCart = async (req, res, next)=>{
         const getUser = await userService.findByEmail(req.user.email);
 
         let arr = getUser.cart;
-        let filterArr = arr.filter((el)=>el.product!=product);
+        let filterArr = arr.filter((el)=>el.product==product);
         getUser.cart = filterArr;
         const putUser = await userService.updateById(getUser);
         return sendResponse(req, res, putUser.cart, true, 200, "", "product removed from cart");
@@ -147,7 +147,7 @@ exports.addToFavourite = async (req, res, next)=>{
 
 exports.uploadImage = async (req, res, next)=>{
     try {
-        let path = __dirname + `/../images/${req.file.originalname}`;
+        let path = __dirname + `/../public/images/${req.file.originalname}`;
         await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(path);
         return sendResponse(req, res, {"imageUrl": `/images/${req.file.originalname}`}, true, 200, "", "image uploaded");
    } catch (err) {

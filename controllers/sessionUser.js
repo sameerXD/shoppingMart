@@ -70,7 +70,7 @@ exports.removeFromCart = async (req, res, next)=>{
         const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
 
         let arr = getAnonymousUser.cart;
-        let filterArr = arr.filter((el)=>el.product!=product);
+        let filterArr = arr.filter((el)=>el.product==product);
         getAnonymousUser.cart = filterArr;
         const putAnonymousUser = await sessionUserService.updateById(getAnonymousUser);
         return sendResponse(req, res, putAnonymousUser.cart, true, 200, "", "product removed from cart");
