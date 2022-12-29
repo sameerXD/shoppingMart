@@ -8,6 +8,6 @@ const upload = require("../middlewares/multer");
 
 router.post("/register" ,register);
 router.post("/login", login);
-router.post("/uploadImage",verifyToken ,upload.single('upload') ,uploadImage);
+router.post("/uploadImage" ,upload.single('upload') ,uploadImage);
 
 module.exports= router;
