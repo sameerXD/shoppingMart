@@ -14,6 +14,9 @@ exports.register = async (req, res, next)=>{
         if(email){
             email = email.toLowerCase();
         }
+        const getShopkeeper = await shopkeeperService.findByEmail(email);
+        if(!getShopkeeper)return sendResponse(req, res, {}, false, 401, "wrong email", "email not found");
+
 
         const hash = bcrypt.hashSync(password, util.security.saltRounds);
         const postData = await shopkeeperService.create({email:email, password: hash});
@@ -49,6 +52,8 @@ exports.login = async (req, res, next)=>{
 
 exports.addProduct = async (req, res, next)=>{
     try{
+        if(req.user.role != util.role.shopkeeper) sendResponse(req, res, postData, true, 401, "", "user is not shopkeeper");
+
         let {categoryId, name, productImage, qty, amount, description} = req.body;
 
         // convert rupee into paisa

@@ -24,6 +24,7 @@ exports.adminLogin = async (req, res, next)=>{
 
 exports.addCategories = async (req, res, next)=>{
     try{
+        if(req.user.role != util.role.admin) sendResponse(req, res, postData, true, 401, "", "user is not admin");
         let name = req.body.name;
         let categoryImage=req.body.categoryImage;
         console.log(categoryImage + "000000");
