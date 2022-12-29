@@ -1,12 +1,18 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 
 require("dotenv").config();
-
+// allow cors 
 app.use(cors({origin:['http://localhost:3000']}));
+
 // reveal true ip even if using a proxy
 app.set('trust proxy', true)
+
+// allow public access of images
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

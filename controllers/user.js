@@ -51,10 +51,10 @@ exports.login = async (req, res, next)=>{
 
 exports.uploadImage = async (req, res, next)=>{
     try {
-        let path = __dirname + `../images/${req.file.originalname}`;
+        let path = __dirname + `/../images/${req.file.originalname}`;
         await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(path);
         return sendResponse(req, res, {"imageUrl": path}, true, 200, "", "image uploaded");
-   } catch (error) {
+   } catch (err) {
         console.log(err);
         sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
    }

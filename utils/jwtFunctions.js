@@ -20,7 +20,7 @@ const verifyToken = (req, res, next)=>{
 
         let jwtSecretKey = util.security.jwtSecretKey;
         let token = req.get('token');
-        if(!token) return sendResponse(req, res, false, 'token is missing', {}, 'token is missing!');
+        if(!token) return sendResponse(req, res, {}, false, 401, 'token is missing', 'token is missing');
     
         const verified = jwt.verify(token, jwtSecretKey);
     
@@ -29,10 +29,10 @@ const verifyToken = (req, res, next)=>{
             next();
         }else{
             // Access Denied
-            return sendResponse(req, res, false, 'token is invalid', {}, 'invalid token');
+            return sendResponse(req, res, {}, false, 401, 'token is invalid', 'token is invalid');
             }
     }catch(err){
-        return sendResponse(req, res, false, 'token is invalid', {}, err);
+        return sendResponse(req, res, {}, false, 401, 'token is invalid', 'token is invalid');
     }
 }
 
