@@ -11,7 +11,8 @@ const productSchema = new Schema({
     categoryId:{ type: SchemaTypes.ObjectId,required:true, ref: "categories"},
     qty:{type: SchemaTypes.Number, default:0},
     amount:{type: SchemaTypes.Number,required:true},
-    description:{ type: SchemaTypes.String, required: true}
+    description:{ type: SchemaTypes.String, required: true},
+    soldBy:{ type: SchemaTypes.ObjectId,required:true, ref: "shopkeepers"}
 },{
     timestamps:true
 });

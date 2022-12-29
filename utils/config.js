@@ -19,6 +19,7 @@ exports.util = {
     role:{
         admin:0,
         anonymousUser:1,
-        shopkeeper:2
+        shopkeeper:2,
+        user:3
     }
 }

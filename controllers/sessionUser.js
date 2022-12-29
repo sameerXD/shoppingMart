@@ -21,7 +21,7 @@ exports.anonymousLogin = async (req, res, next)=>{
 
 exports.getAllCategories = async (req, res, next)=>{
     try{
-        if(req.user.role != util.role.anonymousUser) sendResponse(req, res, postData, true, 401, "", "user is not anonymous user");
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
 
         const getCategories = await categoriesService.findAll();
         return sendResponse(req, res, getCategories, true, 200, "", "fetched all categories");
@@ -35,7 +35,7 @@ exports.getAllCategories = async (req, res, next)=>{
 
 exports.getProductsByCategory = async(req, res, next)=>{
     try{
-        if(req.user.role != util.role.anonymousUser) sendResponse(req, res, postData, true, 401, "", "user is not anonymous user");
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
 
         const {categoryId} = req.query;
         const getProducts = await productService.findByCategoryId(categoryId);
@@ -48,7 +48,7 @@ exports.getProductsByCategory = async(req, res, next)=>{
 
 exports.addToCart = async (req, res, next)=>{
     try{
-        if(req.user.role != util.role.anonymousUser) sendResponse(req, res, postData, true, 401, "", "user is not anonymous user");
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
 
         const {product} = req.body;
         const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
@@ -63,7 +63,7 @@ exports.addToCart = async (req, res, next)=>{
 
 exports.addToFavourite = async (req, res, next)=>{
     try{
-        if(req.user.role != util.role.anonymousUser) sendResponse(req, res, postData, true, 401, "", "user is not anonymous user");
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
 
         const {product} = req.body;
         const getAnonymousUser = await sessionUserService.findByUid(req.user.email);

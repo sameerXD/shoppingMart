@@ -52,26 +52,28 @@ exports.login = async (req, res, next)=>{
 
 exports.addProduct = async (req, res, next)=>{
     try{
-        if(req.user.role != util.role.shopkeeper) sendResponse(req, res, postData, true, 401, "", "user is not shopkeeper");
+        if(req.user.role != util.role.shopkeeper) return sendResponse(req, res, {}, true, 401, "", "user is not shopkeeper");
 
         let {categoryId, name, productImage, qty, amount, description} = req.body;
-
+        
         // convert rupee into paisa
         amount = amount *100;
         const getCategory = await categoryService.findById(categoryId);
         if(!getCategory) return sendResponse(req,res, {},false, 404, "category not found", "wrong category id");
         
-        const postProduct = await productService.create({name, productImage, categoryId, qty, amount, description});
         
         const getShopkeeper = await shopkeeperService.findByEmail(req.user.email);
+
+        const postProduct = await productService.create({name, productImage, categoryId, qty, amount, description, soldBy:getShopkeeper._id});
+        
         getShopkeeper.products.push({product:postProduct._id});
 
         const putShopkeeper = await shopkeeperService.updateById(getShopkeeper);
         
-        sendResponse(req, res, putShopkeeper.products, true, 200, "", "product added")
+        return sendResponse(req, res, putShopkeeper.products, true, 200, "", "product added")
     }catch(err){
         console.log(err);
-        sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
+        return sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
     }
 }
 
