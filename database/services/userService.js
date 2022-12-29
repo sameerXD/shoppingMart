@@ -1,7 +1,7 @@
 const CollectionService = require("../models/Users");
 
 exports.findByEmail= async(email)=>{
-        let getData = await CollectionService.findOne({"email":email});
+        let getData = await CollectionService.findOne({"email":email}).populate('cart.product').populate('bought.product').populate('bought.soldBy');
         return getData;
 }
 

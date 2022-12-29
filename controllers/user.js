@@ -85,6 +85,9 @@ exports.addToCart = async (req, res, next)=>{
         if(req.user.role != util.role.user) return sendResponse(req, res, {}, true, 401, "", "user is not user");
 
         const {product} = req.body;
+        const getProduct = await productService.findById(product);
+        if(!getProduct) return sendResponse(req,res, {}, false, 404, "product not found", "product not found");
+        
         const getUser = await userService.findByEmail(req.user.email);
         getUser.cart.push({product:product});
         const putUser = await userService.updateById(getUser);

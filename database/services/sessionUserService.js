@@ -1,7 +1,7 @@
 const CollectionService = require("../models/SessionUsers");
 
 exports.findByUid= async(uid)=>{
-        let getData = await CollectionService.findOne({"uid":uid});
+        let getData = await CollectionService.findOne({"uid":uid}).populate('cart.product');
         return getData;
 }
 

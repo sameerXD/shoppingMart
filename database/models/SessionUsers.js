@@ -8,14 +8,14 @@ const sessionUserSchema = new Schema({
 	uid: { type: SchemaTypes.String, required: true },
     cart:[
         {
-            product:{ type: SchemaTypes.ObjectId, ref: "products" },
+            product:{ type: SchemaTypes.ObjectId, ref: "product" },
             status:{type:SchemaTypes.Number, default:util.cartProduct.active},
             addTime:{type: Date, default: Date.now}
         }
     ],
     favorite:[
         {
-            product:{ type: SchemaTypes.ObjectId, ref: "products" },
+            product:{ type: SchemaTypes.ObjectId, ref: "product" },
             status:{type:SchemaTypes.Number, default:util.cartProduct.active},
             addTime:{type: Date, default: Date.now}
         }

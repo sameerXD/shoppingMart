@@ -51,6 +51,8 @@ exports.addToCart = async (req, res, next)=>{
         if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
 
         const {product} = req.body;
+        const getProduct = await productService.findById(product);
+        if(!getProduct) return sendResponse(req,res, {}, false, 404, "product not found", "product not found");
         const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
         getAnonymousUser.cart.push({product:product});
         const putAnonymousUser = await sessionUserService.updateById(getAnonymousUser);

@@ -9,25 +9,25 @@ const userSchema = new Schema({
 	password: { type: SchemaTypes.String, required: true },
     cart:[
         {
-            product:{ type: SchemaTypes.ObjectId, ref: "products" },
+            product:{ type: SchemaTypes.ObjectId, ref: "product" },
             status:{type:SchemaTypes.Number, default:util.cartProduct.active},
             addTime:{type: Date, default: Date.now}
         }
     ],
     favorite:[
         {
-            product:{ type: SchemaTypes.ObjectId, ref: "products" },
+            product:{ type: SchemaTypes.ObjectId, ref: "product" },
             status:{type:SchemaTypes.Number, default:util.cartProduct.active},
             addTime:{type: Date, default: Date.now}
         }
     ],
     bought:[
         {
-            product:{ type: SchemaTypes.ObjectId, ref: "products" },
+            product:{ type: SchemaTypes.ObjectId, ref: "product" },
             qty:{type:SchemaTypes.Number, required:true},
             amount:{type:SchemaTypes.Number},
             addTime:{type: Date, default: Date.now},
-            soldBy:{type: SchemaTypes.ObjectId, ref: "shopkeepers"} 
+            soldBy:{type: SchemaTypes.ObjectId, ref: "shopkeeper"} 
         }
     ]
 },{
