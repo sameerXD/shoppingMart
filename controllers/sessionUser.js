@@ -61,6 +61,23 @@ exports.addToCart = async (req, res, next)=>{
     }
 }
 
+exports.removeFromCart = async (req, res, next)=>{
+    try{
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
+        const {product} = req.body;
+        const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
+
+        let arr = getAnonymousUser.cart;
+        let filterArr = arr.filter((el)=>el.product!=product);
+        getAnonymousUser.cart = filterArr;
+        const putAnonymousUser = await sessionUserService.updateById(getAnonymousUser);
+        return sendResponse(req, res, putAnonymousUser.cart, true, 200, "", "product removed from cart");
+    }catch(err){
+        console.log(err);
+        sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
+    }
+}
+
 exports.addToFavourite = async (req, res, next)=>{
     try{
         if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
@@ -75,5 +92,18 @@ exports.addToFavourite = async (req, res, next)=>{
         sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
     }
 }
+
+exports.getProfile = async (req, res, next)=>{
+    try{
+        if(req.user.role != util.role.anonymousUser) return sendResponse(req, res, {}, true, 401, "", "user is not anonymous user");
+        const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
+       
+        return sendResponse(req, res, getAnonymousUser, true, 200, "", "profile fetched");
+    }catch(err){
+        console.log(err);
+        sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
+    }
+}
+
 
 
