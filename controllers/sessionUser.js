@@ -12,7 +12,7 @@ exports.anonymousLogin = async (req, res, next)=>{
         if(getAnonymousUser) return sendResponse(req, res, {accessToken : createJwtToken({email:ip, role:util.role.anonymousUser})}, true, 200, "", "Login Successfull");
         const postData = await sessionUserService.create({uid:ip});
         
-        return sendResponse(req, res, {accessToken : createJwtToken({email:ip, role:util.role.anonymousUser})}, true, 200, "", "Login Successfull");
+        return sendResponse(req, res, {accessToken : createJwtToken({email:ip, role:util.role.anonymousUser}), role:util.role.anonymousUser}, true, 200, "", "Login Successfull");
     }catch(err){
         console.log(err);
         sendResponse(req, res, {}, false, 500, ""+err, "Internal Server Error");
@@ -54,6 +54,7 @@ exports.addToCart = async (req, res, next)=>{
         const getProduct = await productService.findById(product);
         if(!getProduct) return sendResponse(req,res, {}, false, 404, "product not found", "product not found");
         const getAnonymousUser = await sessionUserService.findByUid(req.user.email);
+        if(!getAnonymousUser) return sendResponse(req, res, {}, false, 404, "user not found", "user not found");
         getAnonymousUser.cart.push({product:product});
         const putAnonymousUser = await sessionUserService.updateById(getAnonymousUser);
         return sendResponse(req, res, putAnonymousUser.cart, true, 200, "", "product added to cart");
