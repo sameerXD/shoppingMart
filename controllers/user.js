@@ -4,6 +4,7 @@ const userService = require("../database/services/userService");
 const productService = require("../database/services/productService");
 const shopkeeperService = require("../database/services/shopkeeperService");
 const categoriesService = require("../database/services/categoriesService");
+const sessionUserService = require("../database/services/sessionUserService");
 
 const bcrypt = require("bcrypt");
 const {util} = require("../utils/config");
@@ -21,7 +22,17 @@ exports.register = async (req, res, next)=>{
         if(getUser) return sendResponse(req,res,{}, false, 409, "email already exist","email already exist");
         
         const hash = bcrypt.hashSync(password, util.security.saltRounds);
-        const postData = await userService.create({email:email, password: hash});
+        let newUserPayload = {email:email, password: hash};
+
+        // migrate data 
+        const ip = req.ip;
+        const getAnonymousUser = await sessionUserService.findByUid(ip);
+        if(getAnonymousUser) {
+            newUserPayload.cart = getAnonymousUser.cart;
+            newUserPayload.favorite = getAnonymousUser.favorite;
+        }
+
+        const postData = await userService.create(newUserPayload);
         return sendResponse(req, res, postData, true, 200, "", "user created");
     }catch(err){
         console.log(err);
